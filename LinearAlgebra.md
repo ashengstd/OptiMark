@@ -193,7 +193,7 @@ $$
 例
 -  $f:\Bbb{R}^n \to \Bbb R,f(x)=\mathbf{a^T x}$ 。证明映射 $f$ 为线性映射. 反之, 亦成立。
 -  $tr:\Bbb{R}^{n\times n}\to R$为矩阵迹. 证明 $tr(\cdot)$ 是一个矩阵集上的线性映射。
-## 正交矩阵 （Orthogonal matrices）
+## 正交矩阵 （Orthogonal Matrices）
 ### Def
 如果矩阵 $\mathbf{U}$ 满足 $\mathbf{U}^T\mathbf{U}=I_{n}$ 和 $\mathbf{U}\mathbf{U}^T=I_{n}$ , 则 $\mathbf{U}$ 称为正交矩阵. 如果 $\mathbf{U}=[\mathbf{u_{1},\dots,u_{n}}]$是正交矩阵, 则
 $$
@@ -208,3 +208,82 @@ $$
 几何上, 正交矩阵对应于旋转和反射。
 ### 性质
 正交矩阵的几何意义: 正交矩阵对应空间中的旋转和反射. 在正交变换 下, 向量的长度 (欧氏范数下) 和夹角保持不变.
+令 $\mathbf{x}\in\Bbb{R}^{n}$ ，向量长度
+$$
+\Vert\mathbf{Ux}\Vert^2_{2}=(\mathbf{Ux}^T)\mathbf{Ux}=\mathbf{x}^T
+\mathbf{U}^T\mathbf{Ux}=\mathbf{x}^T\mathbf{x}=\vert\mathbf{x}\Vert_{2}^2$$
+因此, 正交变换 $\mathbf{x\to \mathbf{Ux}}$ 保持向量范数不变。
+正交矩阵保持向量间夹角不变: 令 $\mathbf{x,y}$ 为单位向量, 则夹角 $\cos(\theta)=\mathbf{x}^{T}\mathbf{y}$， 在正交矩阵变换下, $\mathbf{x'=Ux,y'=Uy}$ 的夹角为 $\cos(\theta')=(\mathbf{x'})^{T}\mathbf{y}'$ . 由于
+$$
+(\mathbf{x'})^{T}\mathbf{y}'=(\mathbf{Ux}^T)(\mathbf{Uy})=\mathbf{x}^T\mathbf{U}^T\mathbf{Uy}=\mathbf{x}^T\mathbf{y}
+$$
+因此在正交变换下, 向量间夹角保持不变 $\cos(\theta)=\cos(\theta')$，反之亦真, 即保 持向量长度和夹角不变的变换必为正交变换。
+## 秩一矩阵 (Rank-One Matrices)
+如果矩阵 $\mathbf{A}\in\Bbb{R}^{m\times n}$ 能写成
+$$
+\mathbf{A}=\mathbf{u}^T\mathbf{v},u\in\Bbb{R}^m,v\in\Bbb{R}^n
+$$
+则称 $\mathbf{A}$ 是秩一矩阵 (rank-one matrix).
+秩一矩阵对应一种特殊的线性变换: 对于输入 $\mathbf{x}\in\Bbb{R}^n$ 有：
+$$
+\mathbf{Ax}=(\mathbf{u}^T\mathbf{v})\mathbf{x}=(\mathbf{v}^T\mathbf{x})\mathbf{u}
+$$
+对于任意输入 $\mathbf{x}$ ，秩一矩阵对应的线性映射输出 (映射的像) 都是沿着向量 $\mathbf{u}$ 。 第二个等号是由于 $\mathbf{v}^T\mathbf{x}$ 是数值。
+## 矩阵的迹 (Trace of Matrices)
+### Def
+$n\times n$ 矩阵 $\mathbf{A}$ 的迹 $tr(\mathbf{A})$ 定义为矩阵对角元素之和：
+$$
+tr(\mathbf{A})=\sum_{i=1}^n{A_{ij}}
+$$
+### 性质
+- 转置的迹：$tr(\mathbf{A})=tr(\mathbf{A})$
+- 迹的可交换性: 对于任意两个矩阵 $\mathbf{A,B\in\Bbb{R}^{m\times n}}$ ，有
+$$
+tr(\mathbf{A}^T\mathbf{B})=tr(\mathbf{B}^T\mathbf{A})
+$$
+- 对于 $\mathbf{x,y}\in\Bbb{R}^n$ ，有 $\mathbf{x}^T\mathbf{y}=tr(\mathbf{x}^T\mathbf{y})=tr(\mathbf{y}^T\mathbf{x})$
+- 对于 $\mathbf{x,y}\in\Bbb{R}^n$ 和对称矩阵 $\mathbf{A}\in\Bbb{R}^{m \times n}$ ，有
+$$
+\mathbf{x}^T\mathbf{Ay}=tr(\mathbf{x}^T\mathbf{Ay})=tr(\mathbf{y}^T\mathbf{xA})=tr(\mathbf{Ay}\mathbf{x}^T)
+$$
+## 矩阵的内积
+Recall: 所有 ${m \times n}$ 矩阵构成的集合相对于矩阵加法和数值乘法构成线 性空间, 此空间线性同构于 $\Bbb{R}^{m \times n}$。
+矩阵的内积: 对于给定的 ${m \times n}$ 矩阵 $\mathbf{A,B}\in\Bbb{R}^{m \times n}$ , 定义矩阵内积为
+$$
+\langle\mathbf{A,B}\rangle=tr(\mathbf{A}^T\mathbf{B})=\sum^{i=1}_{m}\sum^{j=1}_{m}\mathbf{A}_{ij}\mathbf{B}_{ij}
+$$
+即，两个矩阵中对应元素乘积的和。
+这相当于将矩阵展开成 ${m \times n}$ 向量，并计算对应的向量内积。
+### 矩阵范数
+回顾范数定义：如果映射 $\Vert\cdot\Vert:\Bbb{R}^{m \times n}\to\Bbb{R}$ 满足如下条件:
+- 正定性：对于 $\forall \mathbf{A}\in \Bbb{R}^{m \times n}$ 都有 $\Vert\mathbf{x}\Vert\geq 0$ ，并且 $\Vert\mathbf{A}\Vert\iff\mathbf{A}=0$  
+- 齐次性：对于 $\forall \mathbf{A}\in \Bbb{R}^{m \times n}$ 及 $\forall\alpha\in\Bbb{R}$ ，都有 $\Vert\alpha\mathbf{A}\Vert=\vert\alpha\vert\Vert\mathbf{A}\Vert$ 
+- 三角不等式：$\Vert\mathbf{A+B}\Vert\leq\Vert\mathbf{A}\Vert+\Vert\mathbf{B}\Vert$  
+则称 $\Vert\cdot\Vert$ 为 $\Bbb{R}^{m \times n}$ 上的矩阵范数。
+- 对于任意给定的向量范数, 都可以诱导出一个矩阵范数, 称为谱范数：
+$$
+\Vert\mathbf{A}\Vert=\max_{x\not=0}\frac{\Vert\mathbf{Ax}\Vert}{\Vert\mathbf{x}\Vert}=\max_{\Vert\mathbf{x}\Vert=1}\Vert\mathbf{Ax}\Vert
+$$
+- Frobenius 范数将矩阵 $\mathbf{A}\in \Bbb{R}^{m \times n}$ 看做是 ${m \times n}$ 的向量,
+$$
+\Vert\mathbf{A}\Vert_{F}=\Bigg(  \sum^{i=1}_{m}\sum^{j=1}_{n}a_{ij}^2 \Bigg )^{\frac{1}{2}}
+$$
+# 线性方程组
+### 矩阵的秩
+${m \times n}$ 矩阵 $\mathbf{A}$ 对应一个线性映射 $\mathcal{A}$
+$$
+\begin{eqnarray}
+\mathcal{A}:\Bbb{R}^n \to \Bbb{R}^m \\
+\mathbf{x}\to \mathbf{Ax}
+\end{eqnarray}
+$$
+集合 $Im(A)=\{\mathbf{Ax|x}\in\Bbb{R}^n\}$ 称为矩阵 $\mathbf{A}$ 的像（Range，Image）。
+-  $Im(A)$ 表示对于任意输入向量 $\mathbf{x}\in\Bbb{R}^n$ ，其输出所能达到的范围。如 $\mathbf{y}\not\in Im(A)$ ，则不存在任何 $\mathbf{x}\Bbb{R}^n$ 使得 $\mathbf{y=Ax}$
+-  $Im(A)$ 构成 $\Bbb{R}^m$ 的一个子空间。
+子空间 $Im(A)$ 的维度称为矩阵 $\mathbf{A}$ 的秩（Rank）,记为 $rank(\mathbf{A})$ ，一般的， $rank(\mathbf{A})\leq\min(m,n)$
+-  $rank(\mathbf{A})=\min(m,n)$ ，矩阵称为满秩的.。
+> Fact: 对任意秩一矩阵 $\mathbf{A}\in\Bbb{R}^{m \times n}$ , 都存在 $\mathbf{x}\in\Bbb{R}^m,\mathbf{y}\in\Bbb{R}^n$ 使得
+> $$
+ \mathbf{A=x}\mathbf{y}^T
+ $$
+ 
