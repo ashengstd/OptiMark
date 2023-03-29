@@ -269,7 +269,7 @@ $$
 \Vert\mathbf{A}\Vert_{F}=\Bigg(  \sum^{i=1}_{m}\sum^{j=1}_{n}a_{ij}^2 \Bigg )^{\frac{1}{2}}
 $$
 # 线性方程组
-### 矩阵的秩
+## 矩阵的秩
 ${m \times n}$ 矩阵 $\mathbf{A}$ 对应一个线性映射 $\mathcal{A}$
 $$
 \begin{eqnarray}
@@ -286,4 +286,166 @@ $$
 > $$
  \mathbf{A=x}\mathbf{y}^T
  $$
- 
+
+## 零空间
+对于 $m \times n$ 矩阵 $\mathbf{A}$ ，集合
+$$
+\mathbf{N}(\mathbf{A}):=\{\mathbf{x}\in\Bbb{R}^n|\mathbf{Ax}=0\}
+$$
+称为矩阵 $\mathbf{A}$ 的零空间，或者核空间（Kernel）。 $\mathbf{N}(\mathbf{A})$ 也常写为 $ker(\mathbf{A})$ 。
+- $\mathbf{N}(\mathbf{A})$ 构成 $\Bbb{R}^n$ 的一个子空间。
+### 零化定理
+令 $\mathcal{A}:\Bbb{R}^n\to\Bbb{R}^m$ ，则有
+$$
+dim(Im(\mathbf{A}))+dim(ker(\mathbf{A}))=n
+$$
+即，零子空间的维度和像空间的维度之和为矩阵的列，因此
+$$
+dim(ker(\mathbf{A}))=n-rank(\mathbf{A})
+$$
+## QR分解
+对于 $m\times n$ 矩阵 $\mathbf{A}$ ，考虑求解线性方程组 $\mathbf{Ax}=\mathbf{y}$ 
+$\mathbf{Basic\;Idea}$:
+如果矩阵 $\mathbf{A}$ 是上三角矩阵 $\mathbf{A}_{ij}=0,i<j$ ，则上述线性方程组可以通过逐个变量带入进行快速求解，因此只需要将 $\mathbf{A}$ 变形为上三角矩阵。
+$\mathbf{Theorem}$:
+对于矩阵 $\mathbf{A}\in\Bbb{R}^{m \times n},m\geq  n$ ，假设其为列满秩 $rank(\mathbf{A})=n$ ，那么 $\mathbf{A}$ 有唯一的约化的 QR 分解 $\mathbf{A}=QR$ ，其中 $Q\in\Bbb{R}^{m\times n}$ 满足 $Q^TQ=I_n,R\in\Bbb{R}^{n\times n}$ 是对角元为正数 $r_{ij}>0$ 的上三角矩阵。对于线性方程组 $\mathbf{Ax}=\mathbf{y}$ ，两边同时乘以 $Q^T$ 可得
+$$
+Q^T\mathbf{Ax}=Q^TQR\mathbf{x}=R\mathbf{x}=Q^T\mathbf{y}
+$$
+因此，问题约简为上三角矩阵的线性方程组
+- QR 分解可以通过Gram-Schmidt 正交化或 Householder 三角化完成
+- QR 分解数值稳定性好，还可以用于估计矩阵的秩，和求解线性最小二乘问题。
+- QR 分解的计算复杂度为 $O(4mn^2/3)$ 
+# 对称矩阵的特征值分解
+## 对称矩阵
+一个矩阵 $\mathbf{A}\in\Bbb{R}^{m\times n}$ 称为对称矩阵，如果 $\mathbf{A}=\mathbf{A}^T$ ，即
+$$
+\mathbf{A}_{ij}=\mathbf{A}_{ji},1\leq i,j\leq n
+$$
+所有 $n\times n$ 对称矩阵所组成的集合称为 $\Bbb{S}^n$ 。
+## 二次型
+如下函数 $q:\Bbb{R}^n\to\Bbb{R}$ 称为二次型：
+$$
+q(\mathbf{x})=\sum_{i=1}^{n}\sum_{j=1}^{n}A_{ij}x_ix_j
+$$
+注意： $x_i^2$ 的系数为 $A_{ii}$ ，对于 $i\not=j$ 的项 $x_ix_j$ ，其系数为 $A_{ij}+A_{ji}$ .
+令 $\mathbf{x}=(x_1,\cdots,x_n)^T\in\Bbb{R}^n$ 为 $n$ 维向量， $\mathbf{A}=(A_{ij})\in\Bbb{R}^{n\times n}$ 为 $n\times n$ 矩阵，则二次型可以表示为
+$$
+q(\mathbf{x})=\sum_{i=1}^{n}\sum_{j=1}^{n}A_{ij}x_ix_j=(x_1,\cdots,x_n)
+\begin{pmatrix}
+&A_{11}&\;\;\cdots\;\;&A_{1n}& \\
+&\vdots& \;\; &\vdots& \\
+&A_{n1}& \;\;\cdots\;\;&A_{nn}&
+\end{pmatrix}
+\begin{pmatrix}
+x_1 \\
+\vdots \\
+x_n
+\end{pmatrix}
+=\mathbf{x}^T\mathbf{Ax}
+$$
+
+由于 $\mathbf{x}^T\mathbf{Ax}=tr(\mathbf{x}^T\mathbf{Ax})=tr(\mathbf{x}^T\mathbf{A}^T\mathbf{x})=\frac{1}{2}\mathbf{x}^T(\mathbf{A}+\mathbf{A}^T)\mathbf{x}$ ，我们可以假定二次型中矩阵 $\mathbf{A}$ 是对称矩阵。
+因此，任何应该对称矩阵 $\mathbf{A}$ ，都对于一个二次型 $q(\mathbf{x})=\mathbf{x}^T\mathbf{Ax}$ 。
+## 二次函数
+函数 $q:\Bbb{R}^n \to \Bbb{R}$ 称为二次函数
+$$
+q(\mathbf{x})=\sum_{i=1}^{n}\sum_{j=1}^{n}A_{ij}x_ix_j+\sum_{i=1}^{n}b_{i}x_i+c
+$$
+其中 $A_{ij},b_i,c\in\Bbb{R},i,j\in\{1,\ldots,n \}$
+一般的二次函数可以写成矩阵-向量形式：
+$$
+q(\mathbf{x})=\frac{1}{2}\mathbf{x}^T
+\mathbf{Ax}+\mathbf{b}^T\mathbf{x}+c$$
+二次函数中间 ，如果线性项和常数项为 0 ，即为二次型。
+## 特殊对称矩阵-对角矩阵
+### Def
+只有对角元素为非零元素，所有非对角元素都是 0 的对称矩阵。
+设 $\lambda\in\Bbb{R}^n$ ，以向量 $\lambda$ 为对角元的 $n\times n$ 对角矩阵一般记作：
+$$
+\mathbf{diag}(\lambda)=\mathbf{diag}(\lambda_1,\cdots,\lambda_n)
+$$
+### 对应的二次型
+$$
+q(\mathbf{x})=\mathbf{x}^T\mathbf{diag}(\lambda)\mathbf{x}=\sum_{i=1}^{n}\lambda_ix_i^2
+$$
+即对角矩阵对应的二次型不包括任何交叉项 $x_ix_j,i\not=j$ ，称为标准二次型。
+## 特征值与特征向量
+### Def
+令 $\mathbf{A}$ 为 $n\times m$ 对称矩阵。如果 $\lambda\in\Bbb{R},\mathbf{u}\in\Bbb{R}^m,\mathbf{u}\not=0$ ，成立
+$$
+\mathbf{Au}=\lambda \mathbf{u}
+$$
+则称 $\lambda$ 为矩阵 $\mathbf{A}$ 的特征值，$\mathbf{u}$ 为对应特征值 $\lambda$ 的特征向量，如果 $\Vert\mathbf{u}\Vert_2=1$ ，则称为归一化特征向量，此时有
+$$
+\mathbf{u}^T\mathbf{Au}=\lambda \mathbf{u}^T\mathbf{u}=\lambda
+$$
+### 几何意义
+矩阵 $\mathbf{A}$ 沿 $\mathbf{u}$ 方向的表现如同数值乘法。
+矩阵 $\mathbf{A}$ 的特征值满足特征方程 $\det(\lambda I-\mathbf{A}=0)$ ，这是应该关于 $\lambda$ 的多项式。
+> 对于对称矩阵，所有的特征值都是实数。
+
+### 对称矩阵特征值分解
+$$
+\forall \mathbf{A}\in\Bbb{S}^n,\mathbf{A}=\mathbf{U\Lambda}\mathbf{U}^T=\sum_{i=1}^{n}\lambda_i\mathbf{u}_i\mathbf{u}_i^T,\Lambda=\mathbf{diag}(\lambda_1,\dots,\lambda_n)
+$$
+其中
+ - 矩阵 $\mathbf{U}=[\mathbf{u_1},\dots,\mathbf{u}_n]$ 为正交矩阵，即 $\mathbf{U}^T\mathbf{U}=\mathbf{U}\mathbf{U}^T=1$ ，并且 $\Vert\mathbf{u}_i\Vert=1,\mathbf{u}_i^T\mathbf{u}_j=\delta_{ij}$
+ - 对角矩阵 $\Lambda$ 的对角元为 $\mathbf{A}$ 的特征值。
+ - 矩阵 $\mathbf{U}$ 的列 $\mathbf{u}_i$ 为 $\mathbf{A}$ 的对应 $\lambda$ 的特征向量 $\mathbf{Au}_i=\lambda_i\mathbf{u}_i$。
+ $\lambda_i$ 为 $\mathbf{A}$ 的特征值，$\mathbf{u}_i$ 是其对应的特征向量。由于 $\mathbf{u}_i^T\mathbf{u}_j=\delta_{ij}$ 
+$$
+\mathbf{Au}_i=\sum_{i=1}^{n}\lambda_i\mathbf{u}_i\mathbf{u}_i^T\mathbf{u}_j=\sum_{i=1}^{n}\lambda_i\mathbf{u}_i(\mathbf{u}_i^T\mathbf{u}_j)=\lambda_i\mathbf{u}_i,j=1,\ldots,n
+$$
+## Eigen-decomposition of Symmetric Matrices
+对称矩阵可以写成秩一矩阵的线性组合
+$$
+\mathbf{A}=\lambda_1\mathbf{u}_1\mathbf{u}_1^T+\ldots\lambda_n\mathbf{u}_n\mathbf{u}_n^T
+$$
+- 矩阵 $\mathbf{A}$ 的迹为： $tr(\mathbf{A})=\textstyle\sum_{i=1}^{n}\lambda_i$
+- 特征矩阵 $\mathbf{U}$ 的每一列都是单位向量 $\Vert\mathbf{u}_i\Vert=1$
+- $\mathbf{U}$ 的任意两列（任意两个特征向量）都是相互正交的：$\mathbf{u}_i^T\mathbf{u}_j=0$ 
+- 矩阵 $\mathbf{A}$ 的秩 $rank(\mathbf{A})$ 等于其非零特征值的数目
+$$
+rank(\mathbf{A})=\sum_{i=1}^{n}\Bbb{1}(\lambda_i\not=0)
+$$
+- 如果矩阵 $\mathbf{A}$ 满秩, 则 $\mathbf{U}$ 的列向量构成线性空间 $\Bbb{R}^n$ 的一组正交基
+### 对称矩阵的谱
+对称矩阵 $\mathbf{A}$ 的特征分解
+$$
+\mathbf{A}=\lambda_1\mathbf{u}_1\mathbf{u}_1^T+\ldots\lambda_n\mathbf{u}_n\mathbf{u}_n^T,\lambda_1\geq \cdots \geq \lambda_n
+$$
+- 所有特征值的集合称为矩阵的谱 (spectral), 记为
+$$
+\sigma(\mathbf{A})=\{\lambda_1,\cdots,\lambda_n\}
+$$
+- 矩阵 $\mathbf{A}$ 的谱范数 (spectral norm)：
+$$
+\Vert\mathbf{A}\Vert=\max_{\sigma(\mathbf{A})}\vert\lambda_i\vert
+$$
+- 如果 $\mathbf{A}$ 为满秩矩阵
+$$
+\mathbf{A}^{-1}=\mathbf{U\Lambda}^{-1}\mathbf{U}^T
+$$
+## Rayleigh quotients
+### Fact
+设 $\mathbf{A}$ 为对称矩阵，$\lambda_{\min},\lambda_{\max}$ 分别为其最小和最大特征值，则成立
+$$
+\lambda_{\min}(\mathbf{A})=\min_{\mathbf{x}^T\mathbf{x}}{\mathbf{x}^T\mathbf{Ax}},\lambda_{\max}(\mathbf{A})=\max_{\mathbf{x}^T\mathbf{x}}{\mathbf{x}^T\mathbf{Ax}}
+$$
+上述结论表明，函数 $\mathbf{x}^T\mathbf{Ax}$ 在单位球 $\Vert\mathbf{x}\Vert=1$ 上的取值范围总是落在区间 $[\lambda_{min},\lambda_{max}]$ 的范围内。
+等价于：
+$$
+\begin{eqnarray}
+\lambda_{\min}(\mathbf{A})=\min_{\mathbf{x}^T\mathbf{x}=1}{\mathbf{x}^T\mathbf{Ax}}=\min_{\mathbf{x}\not=0}{\frac{{\mathbf{x}^T}\mathbf{Ax}}{{\mathbf{x}^T}\mathbf{x}}}, \\
+\lambda_{\max}(\mathbf{A})=\max_{\mathbf{x}^T\mathbf{x}=1}{\mathbf{x}^T\mathbf{Ax}}=\max_{\mathbf{x}\not=0}{\frac{{\mathbf{x}^T}\mathbf{Ax}}{{\mathbf{x}^T}\mathbf{x}}}
+\end{eqnarray}
+$$
+因此, 矩阵的特征值给出了 $\frac{{\mathbf{x}^T}\mathbf{Ax}}{{\mathbf{x}^T}\mathbf{x}}$ 的最大值和最小值, 此式称为瑞利商（Rayleigh quotient）。
+- 对称矩阵的最大最小特征值分别可以看做一个二次型在球面 $\Vert\mathbf{x}\Vert=1$ 上的极大值极小值
+## 矩阵范数
+对于 $m\times n$ 矩阵 $\mathbf{A}$ ，定义
+$$
+\Vert\mathbf{A}\Vert:=\max_{\Vert\mathbf{x}\Vert_2=1}{\Vert\mathbf{Ax}\Vert_2}
+$$
+验证: 此定义构成 $m \times n$ 矩阵构成的线性空间 $\Bbb{R}^{m \times n}$ 上的一个范数. 这称为矩阵范数。
