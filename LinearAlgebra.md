@@ -449,3 +449,99 @@ $$
 \Vert\mathbf{A}\Vert:=\max_{\Vert\mathbf{x}\Vert_2=1}{\Vert\mathbf{Ax}\Vert_2}
 $$
 验证: 此定义构成 $m \times n$ 矩阵构成的线性空间 $\Bbb{R}^{m \times n}$ 上的一个范数. 这称为矩阵范数。
+可以通过 Rayleigh 的方式计算此范数.
+$$
+\Vert\mathbf{A}\Vert=\max_{\Vert\mathbf{x}\Vert_2=1}{\langle\mathbf{Ax,Ax}\rangle}=\max_{\Vert\mathbf{x}\Vert_{2}=1}\mathbf{x}^T\mathbf{A}^T\mathbf{Ax}
+$$
+因此, 矩阵 $\mathbf{A}$ 的范数就是半正定矩阵 $\mathbf{A}^T\mathbf{Ax}$ 的最大特征值的平方根, 即
+$$
+\Vert\mathbf{A}\Vert=\sqrt{\lambda_{\max}(\mathbf{A}^T\mathbf{A})}
+$$
+## 正定矩阵 (positive-definite, PDF)
+对于 $n \times n$ 对称矩阵 $\mathbf{Q},q(\mathbf{x})=\mathbf{x}^T\mathbf{Qx}$
+- 如果 $\mathbf{x}^T\mathbf{Qx}\geq 0,\forall \mathbf{x}\in\Bbb{R}^n$ , 则称 $\mathbf{Q}$ 为半正定矩阵, 记为 $\mathbf{Q}\succeq 0$. 此时, $Q(\mathbf{x})\geq 0$ 为半正定二次型。
+- 如果 $\mathbf{x}^T\mathbf{Qx}\geq 0,\forall \mathbf{x}\in\Bbb{R}^n,\mathbf{x}\not=0$  ，则称矩阵 $\mathbf{Q}$ 为正定矩阵, 记为 $\mathbf{Q}\succ_{0}$. 此时, $Q(\mathbf{x})> 0$ 为正定二次型。
+- 对于正定矩阵, $q(\mathbf{x})=\mathbf{x}^T\mathbf{Qx}=0$ 当且仅当 $\mathbf{x}=0$ 。
+### Def: 
+矩阵 $\mathbf{Q}$ 是半正定矩阵, $\mathbf{x}^T\mathbf{Qx}\geq 0$ 对于对称矩阵特征值分解:
+$$
+\mathbf{Q}=\mathbf{U\Lambda U}^T=\lambda_1\mathbf{u}_1\mathbf{u}_1^T+\ldots\lambda_n\mathbf{u}_n\mathbf{u}_n^T,\lambda_1\geq \cdots \geq \lambda_n
+$$
+由此可得
+$$
+{\mathbf x}^T{\mathbf{Qx}}={\mathbf x}^T\left(\sum_{i=1}^n\lambda_i{\mathbf u}_i{\mathbf a}_i^T\right){\mathbf x}=\sum_{i=1}^{n}\lambda_i{\mathbf x}^T{\mathbf u_i}{\mathbf u}_i^T{\mathbf x}=\sum_{i=1}^n\lambda_i(\mathbf x^T{\mathbf u}_i)^2\quad
+$$
+因此
+- 矩阵 $\mathbf{Q}$ 为半正定矩阵当且仅当: $\lambda_{i}\geq 0$
+- 矩阵 $\mathbf{Q}$ 为正定矩阵当且仅当: $\lambda_1\geq \cdots \geq \lambda_n$。正定矩阵都是可逆的, 并且 $Q^{-1}=\mathbf{U\Lambda}^{-1}\mathbf{U}^T$ 。
+- 正定矩阵的逆矩阵，也是正定矩阵。
+### 矩阵的条件数
+如果 $\mathbf{A}$ 正定矩阵, 并且特征值为 $\lambda_1\geq \cdots \geq \lambda_d$, 则
+$$
+\kappa(\mathbf{A})=\dfrac{\lambda_1}{\lambda_d}=\dfrac{\lambda_\text{max}}{\lambda_\text{min}}
+$$
+称为条件数 (Condition Number)。条件数决定了线性方程组的数值稳定性。
+### 特殊半正定矩阵
+秩一对称矩阵: 对于 $\mathbf{u}\in\Bbb{R}^n$ , 秩一对称矩阵 $\mathbf{Q}=\mathbf{uu}^T$ 为半正定矩阵. 这是由于：
+$$
+\mathbf{x}^T\mathbf{Q}\mathbf{x}=\mathbf {x}^T\mathbf{u}\mathbf{u}^T\mathbf{x}=(\mathbf u^T\mathbf{x})^2 \geq 0
+$$
+更一般的, 对于任意 $m \times n$ 矩阵 $\mathbf{B}\in\Bbb{R}^{m \times n}$ , 则 $\mathbf{A}=\mathbf{BB}^T$ 为半正定矩阵, 因为
+$$
+\mathbf x^T A\mathbf x=\mathbf x^T B^T B\mathbf x=\Vert B\mathbf x\Vert_2^2\geq0
+$$
+### 对角矩阵的正定
+对角矩阵 $\mathbf{D}=\mathbf{diag}(\lambda_1,\cdots,\lambda_n)$ 为正定矩阵与所有对角元全是正数等价。
+### 正定矩阵与椭圆
+设 $\mathbf{Q}$ 为正定矩阵
+$$
+\mathbf{Q}=\mathbf{U}\Lambda\mathbf{U}^{T}=\lambda_{1}\mathbf{u}_1\mathbf{u}_1^{T}+\cdots+\lambda_{n}\mathbf{u}_n\mathbf{u}_n^{T},\lambda_1\geq\cdots\geq\lambda_n>0
+$$
+令 $\mathbf{y}=\mathbf{U}^T\mathbf{x}$, 则二次型
+$$
+\mathbf{x}^{T}\mathbf{Q}\mathbf{x}=\mathbf{x}^T\mathbf{U}\Lambda\mathbf{U}^T\mathbf{x}=(\mathbf{U}^{T}\mathbf{x})^T\Lambda(\mathbf{U}^T \mathbf{x})=\mathbf{y}^T\Lambda\mathbf{y}=\sum_{i}^{n}\lambda_{i}y_{j}^2.
+$$
+所有满足 $\sum_{i}^{n}\lambda_{i}y_{i}^2$ 的点构成的集合
+$$
+\mathbf{E}=\{\mathbf{y}\in\mathbb{R}^n|\lambda_1y_1^2+\cdots+\lambda_ny_n^2=1\}\quad
+$$
+是 $\mathbb{R}^n$ 上的一个椭球面. 由于上述等式，此集合可以写成
+$$
+\mathbf{E}=\{\mathbf{x}\in\mathbb{R}^n|\mathbf{x}^{T}\mathbf{Q}\mathbf{x}=1\}
+$$
+因此，正定矩阵对应一个椭球面。
+## 对于矩阵的内积和范数 (Vector Norm with Metric Q)
+$\mathbf{Q}$ 内积空间: 对于正定矩阵 $\mathbf{Q}$ ，定义 $\mathbb{R}^n$ 上的内积为：
+$$
+\langle\mathbf{x},\mathbf{y}\rangle_Q = \langle\mathbf{x,Q}\mathbf{y}\rangle =\mathbf{x}^T\mathbf{Q}\mathbf{y},\quad\mathbf{x,y}\in\mathbb{R}^n.
+$$
+验证：上述 $\langle\mathbf{x},\mathbf{y}\rangle_{Q}$ 满足内积的的定义, 是空间 $\mathbb{R}^n$ 上的一个内积。
+对应此内积, 可以定义相应的范数为：
+$$
+\|\mathbf{u}\|_\mathbf{Q}^2=\mathbf{u}^T\mathbf{Q}\mathbf{u}.
+$$
+Generalized Cauchy-Schwarz inequality:
+$$
+\vert\langle\mathbf{x},\mathbf{y}\rangle_Q\vert\le\|\mathbf{u}\|_\mathbf{Q}\|\mathbf{v}\|_{\mathbf{Q}}
+$$
+# 算法复杂度
+## 复杂度
+计算复杂度是随着问题规模增长, 算法所需要的计算步骤的增长的衡量. 对于 $\mathbf{A}\in\mathbb{R}^{n \times n}$ , 求解方程组 $\mathbf{Ax=b}$ 的时间代价为：
+- 对于大多数方法，计算所需时间会以 $n^3$ 的量级增长。
+### Flop 计数 (floating-point operation)
+- flop: 两个浮点数之间的一次加法、减法、乘法或除法
+- 估计算法复杂度: 将计算所需的 flops 数量表示为一个关于问题规 模的（多项式）函数
+- 可作为复杂度的粗略估计
+>计算复杂度通常简化成只保留最高项, 因此 $n^3+4n^2\sim O(n^3)$ ，表示计算机运算时间相对于问题规模立方增长。
+## 向量-向量运算 
+$\mathbf{x,y}\in\Bbb{R}^n$
+- 内积 $\mathbf{x}^T\mathbf{y}$: $2n-1\;flops$, 当 $n$ 较大, 可以记为 $2n$
+- 求和 $\mathbf{x+y}$ 与数乘 $\alpha\mathbf{x}$: $n\;flops$
+## 矩阵-向量乘法
+$\mathbf{y}=\mathbf{Ax},\mathbf{A}\in\Bbb{R}^{m \times n}$
+- $m(2n-1)\;flops$, 当 $n$ 较大, 可以记为 $2mn$
+- 当 $\mathbf{A}$ 为 $n\times n$方阵, $n(2n-1)\;flops$ 当 $n$ 较大, 可以记为 $2n^2\sim O(n^2)$
+### 矩阵-矩阵乘法
+$\mathbf{C}=\mathbf{AB},\mathbf{A}\in\Bbb{R}^{m \times n},\mathbf{B}\in\Bbb{R}^{n \times p}$
+- $mp(2n-1)\;flops$, 当 $n$ 较大, 可以记为 $2nmp$
+- 当 $\mathbf{A},\mathbf{B}$ 为 $n\times n$ 方阵, $n(2n-1)\;flops$, 当 $n$ 较大, 可以记为 $2n^3\sim O(n^3)$
