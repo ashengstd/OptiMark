@@ -345,6 +345,16 @@ R_{0}&=& \frac{1}{2}\mathbf{X}
 \end{eqnarray}
 $$
 最少62次
+$$
+\nabla f(\mathbf{X})=Q>{0} \\
+$$
+因此 $f(\mathbf{X})$ 为光滑强凸函数。
+令$R=\|\mathbf{X}_{0}-\mathbf{X}^*\|$
+则
+$$
+t> \frac{L}{u}\log\left( \frac{R^2L}{2\epsilon} \right)=10\times \log\left( \frac{2\times 10}{2\times 10^{-10}} \right)=365.41
+$$
+所以最少需要366次。
 # 1.1.7
 ## 1
 $$
