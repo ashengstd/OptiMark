@@ -196,7 +196,7 @@ f(\mathbf x) &= \mathbf x^T \mathit Q \mathbf x \\
 \therefore&\mathbf x^T\mathit Q\mathbf x \le \lambda _1 \sum_{i=1}^{n}(\mathbf x^T \mu_i)^2\\
 if\, ||&\mathbf x||=1, \mathbf x^T \mathit Q \mathbf x \le \lambda_1||\mathbf x||^2||\mu||^2=\lambda_1\\
 \therefore &\lambda_1 = \underset{||\mathbf x|| = 1}{max} \quad \mathbf x^T \mathit Q \mathbf x = \underset{||\mathbf x||=1}{max} \quad \frac{\mathbf x^T \mathit Q \mathbf x}{\mathbf x^T \mathbf x}\\
-if\, \mathbf x  &\ne 0 时, \mathbf x^T \mathit Q \mathbf x \le \lambda_1 ||\mathbf x||^2 ||\mu||^2\\
+if\, \mathbf x  &\ne 0, \mathbf x^T \mathit Q \mathbf x \le \lambda_1 ||\mathbf x||^2 ||\mu||^2\\
 \because &||\mu||^2 = 1,||\mathbf x||^2 = \mathbf x^T \mathbf x\\
 \therefore &\lambda_1 = \underset{x \ne 0}{max}\quad \frac{\mathbf x^T \mathit Q \mathbf x}{\mathbf x^T \mathbf x}\\
 \therefore &\lambda_1 = \underset{||\mathbf x|| = 1}{max} \quad \mathbf x^T \mathit Q \mathbf x=\underset{x \ne 0}{max}\quad \frac{\mathbf x^T \mathit Q \mathbf x}{\mathbf x^T \mathbf x}
@@ -372,3 +372,184 @@ $$
 ## 2
 
 ## 3
+
+# 1.3.1
+## 精确线搜索
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+Q = np.array([[1, 0], [0, 10]], dtype="float32")
+func = lambda x: 0.5 * np.dot(x.T, np.dot(Q, x)).squeeze() + 10
+gradient = lambda x: np.dot(Q, x)
+
+
+x_0 = np.array([0, 0]).reshape([-1, 1])
+
+
+def gradient_descent(start_point, func, gradient, epsilon=0.01):
+    assert isinstance(start_point, np.ndarray)
+    global Q, x_0
+    x_k_1, iter_num, loss = start_point, 0, []
+    xs = [x_k_1]
+
+    while True:
+        g_k = gradient(x_k_1).reshape([-1, 1])
+        if np.sqrt(np.sum(g_k ** 2)) < epsilon:
+            break
+        alpha_k = np.dot(g_k.T, g_k).squeeze() / (np.dot(g_k.T, np.dot(Q, g_k))).squeeze()
+        x_k_2 = x_k_1 - alpha_k * g_k
+        iter_num += 1
+        xs.append(x_k_2)
+        loss.append(float(np.fabs(func(x_k_2) - func(x_0))))
+        if np.fabs(func(x_k_2) - func(x_k_1)) < epsilon:
+            break
+        x_k_1 = x_k_2
+    return xs, iter_num, loss
+
+
+x0 = np.array([1,1], dtype="float32").reshape([-1, 1])
+xs, iter_num, loss = gradient_descent(start_point=x0, func=func, gradient=gradient, epsilon=1e-10)
+print(xs[-1])
+print(iter_num)
+plt.style.use("seaborn-v0_8")
+plt.figure(figsize=[12, 6])
+plt.plot(loss)
+plt.xlabel("# iteration", fontsize=12)
+plt.ylabel("Loss: $|f(x_k) - f(x^*)|$", fontsize=12)
+plt.yscale("log")
+plt.show()
+
+```
+## 固定步长精确线搜索
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+Q = np.array([[1, 0], [0, 10]], dtype="float32")
+func = lambda x: 0.5 * np.dot(x.T, np.dot(Q, x)).squeeze() + 10
+gradient = lambda x: np.dot(Q, x)
+
+
+x_0 = np.array([0, 0]).reshape([-1, 1])
+
+
+def gradient_descent_constant_step(start_point, func, gradient, epsilon=0.01):
+    assert isinstance(start_point, np.ndarray)
+    global Q, x_0
+    x_k_1, iter_num, loss = start_point, 0, []
+    xs = [x_k_1]
+
+    while True:
+        g_k = gradient(x_k_1).reshape([-1, 1])
+        if np.sqrt(np.sum(g_k ** 2)) < epsilon:
+            break
+        alpha = 1/10
+        x_k_2 = x_k_1 - alpha * g_k
+        iter_num += 1
+        xs.append(x_k_2)
+        loss.append(float(np.fabs(func(x_k_2) - func(x_0))))
+        if np.fabs(func(x_k_2) - func(x_k_1)) < epsilon:
+            break
+        x_k_1 = x_k_2
+    return xs, iter_num, loss
+
+
+x0 = np.array([1,1], dtype="float32").reshape([-1, 1])
+xs, iter_num, loss = gradient_descent_constant_step(start_point=x0, func=func, gradient=gradient, epsilon=1e-10)
+print(xs[-1])
+print(iter_num)
+plt.style.use("seaborn-v0_8")
+plt.figure(figsize=[12, 6])
+plt.plot(loss)
+plt.xlabel("# iteration", fontsize=12)
+plt.ylabel("Loss: $|f(x_k) - f(x^*)|$", fontsize=12)
+plt.yscale("log")
+plt.show()
+
+```
+## 调用测试（Wolf）
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy.optimize as optimize
+
+Q = np.array([[1, 0], [0, 10]], dtype="float32")
+func = lambda x: 0.5 * np.dot(x.T, np.dot(Q, x)).squeeze() + 10
+gradient = lambda x: np.dot(Q, x)
+
+
+x_0 = np.array([0, 0]).reshape([-1, 1])
+
+
+def gradient_descent_wolfe(start_point, func, gradient, epsilon=1e-6):
+    assert isinstance(start_point, np.ndarray)
+    global Q, x_0
+    x_k_1, iter_num, loss = start_point, 0, []
+    xs = [x_k_1]
+
+    while True:
+        g_k = gradient(x_k_1).reshape([-1, 1])
+        if np.sqrt(np.sum(g_k ** 2)) < epsilon:
+            break
+        alpha_k = optimize.linesearch.line_search_wolfe2(f=func,myfprime=lambda x: np.reshape(np.dot(Q, x), [1, -1]),xk=x_k_1,pk=-g_k)[0]
+        if alpha_k == None:
+            break
+        elif isinstance(alpha_k, float):
+            alpha_k = alpha_k
+        else:
+            alpha_k = alpha_k.squeeze()
+
+        x_k_2 = x_k_1 - alpha_k * g_k
+        iter_num += 1
+        xs.append(x_k_2)
+        loss.append(float(np.fabs(func(x_k_2) - func(x_0))))
+        if np.fabs(func(x_k_2) - func(x_k_1)) < epsilon:
+            break
+        x_k_1 = x_k_2
+    return xs, iter_num, loss
+
+
+x0 = np.array([1,1], dtype="float32").reshape([-1, 1])
+xs, iter_num, loss = gradient_descent_wolfe(start_point=x0, func=func, gradient=gradient, epsilon=1e-10)
+print(xs[-1])
+print(iter_num)
+plt.style.use("seaborn-v0_8")
+plt.figure(figsize=[12, 6])
+plt.plot(loss)
+plt.xlabel("# iteration", fontsize=12)
+plt.ylabel("Loss: $|f(x_k) - f(x^*)|$", fontsize=12)
+plt.yscale("log")
+plt.show()
+
+```
+# 1.3.2
+```python
+import numpy as np
+
+
+n = 8 
+B = np.random.rand(n, n)
+A = np.dot(B, B.transpose())
+x0 = np.random.rand(n,1)
+
+print(x0)
+print(A)
+x = [x0] 
+count = 0
+size = 60
+while count <= size:
+    y = np.dot(A,x[-1])
+    print(x[count])
+    x.append(y/np.linalg.norm(y, ord=None, axis=None, keepdims=False))
+    count = count + 1
+
+lam = np.linalg.eig(A)
+index = np.argmax(lam[0])
+lamda_max = np.real(lam[0][index])
+vector = lam[1][:,index]
+vector_final = np.transpose((np.real(vector)))
+print(lamda_max, vector_final)
+print(vector_final-x[-1])
+
+```
