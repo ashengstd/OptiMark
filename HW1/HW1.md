@@ -281,7 +281,7 @@ $$
 ## 1
 $$
 \begin{eqnarray}
-f(\mathbf{X}_{k+1})&=& \frac{1}{2}(\alpha\nabla f(\mathbf{X}_{k}))^TQ(\mathbf{X}_{k}-\alpha\nabla f(\mathbf{X}_{k})) \\
+f(\mathbf{X}_{k}-\mathbf{X}_{k+1})&=& \frac{1}{2}(\alpha\nabla f(\mathbf{X}_{k}))^TQ(\mathbf{X}_{k}-\alpha\nabla f(\mathbf{X}_{k})) \\
 &=& \frac{1}{2}\mathbf{X}_{k}^TQ\mathbf{X}_{k+1}-\alpha\nabla f(\mathbf{X}_{k})Q\mathbf{X}_{k} \\
 &=& f(\mathbf{X}_{k})-\alpha\nabla f(\mathbf{X}_{k})^TQ\mathbf{X}_{k}+ \frac{1}{2}\alpha^2\nabla f(\mathbf{X}_{k})^TQ\nabla f(\mathbf{X}_{k}) \\
 \because f(\mathbf{X}_{k+1}) &<& f(\mathbf{X}_{k})
